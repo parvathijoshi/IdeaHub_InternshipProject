@@ -7,6 +7,10 @@ const User = sequelize.define('User', {
         primaryKey: true,
         autoIncrement: true,
     },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     username: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -22,7 +26,9 @@ const User = sequelize.define('User', {
             key: 'id',
         },
     },
-});
+}, {
+    timestamps: false // Disable createdAt and updatedAt fields
+  });
 
 // Export the User model as default
 export default User;
