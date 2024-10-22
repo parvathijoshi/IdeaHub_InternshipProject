@@ -4,20 +4,21 @@ import express from 'express';
 import User from '../models/User.js'; // Adjust the import based on your structure
 
 const router = express.Router();
-
-// POST /api/auth/login
+//Post: Login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
+  console.log(username, password);
   try {
-    const user = await User.findOne({ username }); // Adjust this based on your User model structure
+    // Correct the query to include a where clause
+    const user = await User.findOne({ where: { username } }); // Add where clause here
+    
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Here you can directly compare passwords since you mentioned storing it as plain text
+    // Compare passwords
     if (user.password === password) {
-      return res.status(200).json({ message: 'Successful login' });
+      return res.status(200).json({ message: 'Login successful' });
     } else {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
