@@ -7,7 +7,7 @@ const router = express.Router();
 //Post: Login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log(username, password);
+
   try {
     // Correct the query to include a where clause
     const user = await User.findOne({ where: { username } }); // Add where clause here
