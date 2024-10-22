@@ -24,6 +24,15 @@ const Idea = sequelize.define('Idea', {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
+    createdBy: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    likes: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
+    }
 });
 
 // Export the Idea model as default
