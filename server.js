@@ -7,9 +7,7 @@ import bodyParser from 'body-parser';
 import { connectDB } from './config/db.js'; // Import connectDB correctly
 import ideasRouter from './routes/Ideas.js';
 import loginRouter from './routes/Auth.js';
-import Role from './models/Role.js';
-import User from './models/User.js';
-import Idea from './models/Idea.js';
+import commentsRouter from './routes/Comments.js';
 
 // Create an Express application
 const app = express();
@@ -22,6 +20,7 @@ app.use(bodyParser.json());
 // Route handling
 app.use('/api/ideas', ideasRouter);
 app.use('/api/auth', loginRouter);
+app.use('/api/comments', commentsRouter);
 // Connect to the database
 connectDB(); // Use the imported `connectDB` function
 

@@ -75,20 +75,24 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Route for updating an idea
-router.put('/:id', async (req, res) => { // Fixed this line
+router.put('/:id', async (req, res) => { 
     const { id } = req.params;
-    const { title, description } = req.body;
+    const { title, description, createdBy } = req.body;
     try {
-        const updatedIdea = await Idea.update(
-            { title, description },
+        const updated = await Idea.update(
+            { title, description, createdBy },
             { where: { id } }
         );
         
-        if (updatedIdea[0] === 0) {
+        if (updated[0] === 0) {
             return res.status(404).send({ message: 'Idea not found' });
         }
 
-        res.send({ id, title, description });
+        // Fetch the updated idea
+        const updatedIdea = await Idea.findOne({ where: { id } });
+
+        // Return the updated idea
+        res.send(updatedIdea);
     } catch (error) {
         res.status(500).send({ message: 'Error updating idea', error });
     }
