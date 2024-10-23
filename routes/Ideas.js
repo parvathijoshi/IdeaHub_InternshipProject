@@ -8,14 +8,14 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const ideas = await sequelize.query(`
-            SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Users".username 
+            SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username 
             FROM public."Ideas"
             INNER JOIN public."Users" ON "Ideas"."createdBy" = "Users".id
             ORDER BY "Ideas"."createdAt" DESC;
         `, {
             type: sequelize.QueryTypes.SELECT
         });
-
+        
         res.json(ideas);
     } catch (error) {
         console.error("Error fetching ideas:", error);  // Log error to the console
