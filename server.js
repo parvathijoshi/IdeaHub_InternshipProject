@@ -8,6 +8,7 @@ import { connectDB } from './config/db.js'; // Import connectDB correctly
 import ideasRouter from './routes/Ideas.js';
 import loginRouter from './routes/Auth.js';
 import commentsRouter from './routes/Comments.js';
+import approvalsRouter from './routes/Approvals.js';
 
 // Create an Express application
 const app = express();
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 app.use('/api/ideas', ideasRouter);
 app.use('/api/auth', loginRouter);
 app.use('/api/comments', commentsRouter);
+app.use('/api/approvals', approvalsRouter);
 // Connect to the database
 connectDB(); // Use the imported `connectDB` function
 
