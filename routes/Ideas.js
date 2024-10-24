@@ -4,18 +4,29 @@ import Idea from '../models/Idea.js'; // Adjust the import path as necessary
 import { sequelize } from '../config/db.js';  // Use named import
 
 const router = express.Router();
-// Route to get all ideas with the username of the creator using raw SQL query
+// Route to get all ideas with optional filtering by createdBy (creator's ID)
 router.get('/', async (req, res) => {
     try {
-        const ideas = await sequelize.query(`
+        const { createdBy } = req.query; // Get the createdBy query parameter if it exists
+        let query = `
             SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username 
             FROM public."Ideas"
             INNER JOIN public."Users" ON "Ideas"."createdBy" = "Users".id
-            ORDER BY "Ideas"."createdAt" DESC;
-        `, {
+        `;
+
+        // Add WHERE clause if createdBy is provided
+        if (createdBy) {
+            query += ` WHERE "Ideas"."createdBy" = :createdBy `;
+        }
+
+        query += ' ORDER BY "Ideas"."createdAt" DESC;';
+
+        // Execute the query with or without the createdBy parameter
+        const ideas = await sequelize.query(query, {
+            replacements: createdBy ? { createdBy } : {},  // Pass the createdBy value if it's provided
             type: sequelize.QueryTypes.SELECT
         });
-        
+
         res.json(ideas);
     } catch (error) {
         console.error("Error fetching ideas:", error);  // Log error to the console
