@@ -12,11 +12,12 @@ router.get('/', async (req, res) => {
             SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username 
             FROM public."Ideas"
             INNER JOIN public."Users" ON "Ideas"."createdBy" = "Users".id
+            WHERE "Ideas"."deletedStatus" = 0  -- Filter out deleted ideas
         `;
 
         // Add WHERE clause if createdBy is provided
         if (createdBy) {
-            query += ` WHERE "Ideas"."createdBy" = :createdBy `;
+            query += ` AND "Ideas"."createdBy" = :createdBy `;
         }
 
         query += ' ORDER BY "Ideas"."createdAt" DESC;';
@@ -67,21 +68,24 @@ router.post('/', async (req, res) => {
     }
 });
 
-// DELETE a specific idea by ID
+// DELETE route modified to mark an idea as deleted by updating `deletedStatus`
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        // Delete the idea from the database
-        const deletedIdea = await Idea.destroy({ where: { id: id } });
-        
-        if (deletedIdea) {
-            res.status(200).json({ message: 'Idea deleted successfully' });
-        } else {
+        // Update `deletedStatus` to 1 instead of deleting the idea
+        const [updatedRowCount] = await Idea.update(
+            { deletedStatus: 1 },
+            { where: { id: id } }
+        );
+
+        if (updatedRowCount === 0) {
             res.status(404).json({ message: 'Idea not found' });
+        } else {
+            res.status(200).json({ message: 'Idea moved to bin successfully' });
         }
     } catch (error) {
-        res.status(500).json({ message: 'Error deleting the idea', error });
+        res.status(500).json({ message: 'Error moving the idea to bin', error });
     }
 });
 
@@ -109,7 +113,7 @@ router.put('/:id', async (req, res) => {
     }
 });
   
-// In your routes/Ideas.js (or similar file)
+// Route to handle likes on an idea
 router.post('/:id/like', async (req, res) => {
     try {
         const ideaId = req.params.id;
