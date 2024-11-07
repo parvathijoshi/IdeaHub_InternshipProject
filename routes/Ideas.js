@@ -12,10 +12,9 @@ router.get('/', async (req, res) => {
             SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username, "Ideas"."is_draft", "Ideas"."isApproved"
             FROM public."Ideas"
             INNER JOIN public."Users" ON "Ideas"."createdBy" = "Users".id
-            WHERE "Ideas"."deletedStatus" = 0  -- Filter out deleted ideas
         `;
-
         const whereConditions = [];
+        whereConditions.push(`"Ideas"."deletedStatus" = 0`);
         if (createdBy) {
             whereConditions.push(`"Ideas"."createdBy" = :createdBy`);
         }
@@ -25,7 +24,6 @@ router.get('/', async (req, res) => {
         if (whereConditions.length > 0) {
             query += ` WHERE ${whereConditions.join(' AND ')}`;
         }
-
         query += ' ORDER BY "Ideas"."createdAt" DESC;';
 
         // Execute the query with or without the createdBy parameter
