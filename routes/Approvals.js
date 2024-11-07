@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
               "Users".username, "Ideas"."isApproved"
        FROM public."Ideas"
        INNER JOIN public."Users" ON "Ideas"."createdBy" = "Users".id
-       WHERE "Ideas".likes > 10
+       WHERE "Ideas".likes > 10 AND "Ideas"."deletedStatus" = 0  -- Filter out deleted ideas
        ORDER BY "Ideas"."createdAt" DESC;`,
       { type: sequelize.QueryTypes.SELECT }
     );
