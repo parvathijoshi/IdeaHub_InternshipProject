@@ -35,6 +35,7 @@ const Idea = sequelize.define('Idea', {
     },
     deletedStatus: {
         type: DataTypes.INTEGER,
+        defaultValue: 0,
     },
     isApproved: {
         type: DataTypes.INTEGER,
