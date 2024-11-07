@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     try {
         const { createdBy } = req.query; // Get the createdBy query parameter if it exists
         let query = `
-            SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username 
+            SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username, "Ideas"."isApproved" 
             FROM public."Ideas"
             INNER JOIN public."Users" ON "Ideas"."createdBy" = "Users".id
             WHERE "Ideas"."deletedStatus" = 0  -- Filter out deleted ideas
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
             replacements: createdBy ? { createdBy } : {},  // Pass the createdBy value if it's provided
             type: sequelize.QueryTypes.SELECT
         });
-
+        
         res.json(ideas);
     } catch (error) {
         console.error("Error fetching ideas:", error);  // Log error to the console
