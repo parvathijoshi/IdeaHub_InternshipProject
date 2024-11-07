@@ -9,6 +9,7 @@ import ideasRouter from './routes/Ideas.js';
 import loginRouter from './routes/Auth.js';
 import commentsRouter from './routes/Comments.js';
 import approvalsRouter from './routes/Approvals.js';
+import binRouter from './routes/BinPage.js';
 
 // Create an Express application
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/ideas', ideasRouter);
 app.use('/api/auth', loginRouter);
 app.use('/api/comments', commentsRouter);
 app.use('/api/approvals', approvalsRouter);
+app.use('/api/bin', binRouter);
 // Connect to the database
 connectDB(); // Use the imported `connectDB` function
 
