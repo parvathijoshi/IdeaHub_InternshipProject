@@ -41,6 +41,11 @@ const Idea = sequelize.define('Idea', {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0,
+    },
+    is_draft: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
     }
 });
 

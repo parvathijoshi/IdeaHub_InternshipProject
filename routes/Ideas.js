@@ -7,24 +7,33 @@ const router = express.Router();
 // Route to get all ideas with optional filtering by createdBy (creator's ID)
 router.get('/', async (req, res) => {
     try {
-        const { createdBy } = req.query; // Get the createdBy query parameter if it exists
+        const { createdBy, is_draft } = req.query; // Get the createdBy query parameter if it exists
         let query = `
-            SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username, "Ideas"."isApproved" 
+            SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username, "Ideas"."is_draft", "Ideas"."isApproved"
             FROM public."Ideas"
             INNER JOIN public."Users" ON "Ideas"."createdBy" = "Users".id
             WHERE "Ideas"."deletedStatus" = 0  -- Filter out deleted ideas
         `;
 
-        // Add WHERE clause if createdBy is provided
+        const whereConditions = [];
         if (createdBy) {
-            query += ` AND "Ideas"."createdBy" = :createdBy `;
+            whereConditions.push(`"Ideas"."createdBy" = :createdBy`);
+        }
+        if (is_draft !== undefined) {
+            whereConditions.push(`"Ideas"."is_draft" = :is_draft`);
+        }
+        if (whereConditions.length > 0) {
+            query += ` WHERE ${whereConditions.join(' AND ')}`;
         }
 
         query += ' ORDER BY "Ideas"."createdAt" DESC;';
 
         // Execute the query with or without the createdBy parameter
         const ideas = await sequelize.query(query, {
-            replacements: createdBy ? { createdBy } : {},  // Pass the createdBy value if it's provided
+            replacements: {
+                createdBy: createdBy,
+                is_draft: is_draft
+            },  // Pass the createdBy value if it's provided
             type: sequelize.QueryTypes.SELECT
         });
         
@@ -59,9 +68,9 @@ router.get('/:id', async (req, res) => {
 
 // Route to create a new idea
 router.post('/', async (req, res) => {
-    const { title, description, createdBy } = req.body;
+    const { title, description, createdBy, is_draft } = req.body;
     try {
-        const newIdea = await Idea.create({ title, description, createdBy });
+        const newIdea = await Idea.create({ title, description, createdBy, is_draft });
         res.status(201).json(newIdea);
     } catch (error) {
         res.status(400).json({ message: error.message });
