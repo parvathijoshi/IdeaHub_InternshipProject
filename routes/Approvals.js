@@ -1,11 +1,7 @@
-// routes/Approvals.js
-
 import express from 'express';
 import { sequelize } from '../config/db.js';
 
 const router = express.Router();
-
-// Get ideas with likes greater than 10 along with the associated username
 router.get('/', async (req, res) => {
   try {
     const result = await sequelize.query(
@@ -29,7 +25,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Approve an idea
 router.put('/approve/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -51,7 +46,6 @@ router.put('/approve/:id', async (req, res) => {
   }
 });
 
-// Reject an idea
 router.put('/reject/:id', async (req, res) => {
   const { id } = req.params;
   try {

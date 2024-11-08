@@ -12,8 +12,7 @@ const Role = sequelize.define('Role', {
         allowNull: false,
     },
 }, {
-    timestamps: false // Disable createdAt and updatedAt fields
+    timestamps: false 
   });
 
-// Export the Role model as default
 export default Role;

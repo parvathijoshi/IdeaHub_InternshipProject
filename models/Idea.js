@@ -1,6 +1,5 @@
-// models/Idea.js
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/db.js'; // Ensure this path is correct
+import { sequelize } from '../config/db.js';
 
 const Idea = sequelize.define('Idea', {
     id: {
@@ -49,5 +48,4 @@ const Idea = sequelize.define('Idea', {
     }
 });
 
-// Export the Idea model as default
 export default Idea;

@@ -1,27 +1,23 @@
-// routes/Auth.js
-
 import express from 'express';
-import User from '../models/User.js'; // Adjust the import based on your structure
+import User from '../models/User.js'; 
 
 const router = express.Router();
 
-// Post: Login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   
   try {
-    const user = await User.findOne({ where: { username } }); // Fetch user based on username
+    const user = await User.findOne({ where: { username } }); 
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Compare passwords (consider using bcrypt for hashing in a production app)
     if (user.password === password) {
       return res.status(200).json({ 
         message: 'Login successful', 
-        userId: user.id, // Return user ID
-        username: user.username, // Return username
+        userId: user.id, 
+        username: user.username, 
         name: user.name,
         roleId: user.roleId
       });

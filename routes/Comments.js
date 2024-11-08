@@ -4,7 +4,6 @@ import { sequelize } from '../config/db.js';
 
 const router = express.Router();
 
-// Post: Add a new comment
 router.post('/', async (req, res) => {
     const { comment, commentedBy, commentedOn } = req.body;
     
@@ -21,7 +20,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Get: Fetch comments for a specific idea
 router.get('/:ideaId', async (req, res) => {
     const ideaId = req.params.ideaId;
 
@@ -44,7 +42,6 @@ router.get('/:ideaId', async (req, res) => {
     }
 });
 
-// Route for deleting a comment
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     
@@ -55,7 +52,7 @@ router.delete('/:id', async (req, res) => {
         return res.status(404).send({ message: 'Comment not found' });
       }
   
-      res.status(204).send(); // No content
+      res.status(204).send(); 
     } catch (error) {
       res.status(500).send({ message: 'Error deleting comment', error });
     }

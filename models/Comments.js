@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/db.js'; // Ensure this path is correct
+import { sequelize } from '../config/db.js'; 
 
 const Comment = sequelize.define('Comment', {
     id: {

@@ -27,8 +27,7 @@ const User = sequelize.define('User', {
         },
     },
 }, {
-    timestamps: false // Disable createdAt and updatedAt fields
+    timestamps: false 
   });
 
-// Export the User model as default
 export default User;
