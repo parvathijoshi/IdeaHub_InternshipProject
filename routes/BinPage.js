@@ -9,8 +9,7 @@ const router = express.Router();
 // Route to get deleted ideas (bin page) using raw SQL query
 router.get('/', async (req, res) => {
     try {
-        const { createdBy } = req.query; // Get the createdBy query parameter if it exists
-        // Execute raw SQL query to fetch deleted ideas where deletedStatus = 1
+        const { createdBy } = req.query;
         let query = `
             SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."deletedStatus", "Ideas"."createdBy", "Users".username 
             FROM public."Ideas"
@@ -57,6 +56,26 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
       console.error('Error in backend deletion:', error);
       res.status(500).json({ error: 'Failed to delete idea' });
+    }
+});
+
+router.put('/restore/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        
+        const [updatedRows] = await Idea.update(
+            { deletedStatus: 0 },
+            { where: { id: id } } 
+        );
+
+        if (updatedRows === 0) {
+            return res.status(404).json({ message: 'Idea not found or already restored' });
+        }
+
+        res.status(200).json({ message: 'Idea restored successfully' });
+    } catch (error) {
+        console.error('Error restoring idea:', error);
+        res.status(500).json({ error: 'Failed to restore idea' });
     }
 });
   
