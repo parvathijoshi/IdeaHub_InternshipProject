@@ -1,7 +1,8 @@
 // routes/Auth.js
 
 import express from 'express';
-import { sequelize } from '../config/db.js';  // Use named import
+import { sequelize } from '../config/db.js';
+import Idea from '../models/Idea.js';
 
 const router = express.Router();
 
@@ -41,17 +42,22 @@ router.get('/', async (req, res) => {
     }
 });
 
-// DELETE /api/ideas/:id - Permanently delete idea by ID
-router.delete('/:id', async (req, res) => {  // Adjust path if needed to match client URL
+router.delete('/:id', async (req, res) => {  
     const { id } = req.params;
     try {
-      await Idea.findByIdAndDelete(id); // Ensure model name matches your database schema
+      const deletedRows = await Idea.destroy({
+        where: {
+          id: id
+        }
+      });
+      if (deletedRows === 0) {
+        return res.status(404).json({ message: 'Idea not found' });
+      }
       res.status(200).json({ message: 'Idea permanently deleted' });
     } catch (error) {
       console.error('Error in backend deletion:', error);
       res.status(500).json({ error: 'Failed to delete idea' });
     }
-  });
-  
+});
   
 export default router;
