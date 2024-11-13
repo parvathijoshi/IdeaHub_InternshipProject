@@ -1,6 +1,7 @@
 import express from 'express';
 import { sequelize } from '../config/db.js';
 import Idea from '../models/Idea.js';
+import IdeasWithTags from '../models/IdeasWithTags.js';
 
 const router = express.Router();
 router.get('/', async (req, res) => {
@@ -34,9 +35,15 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {  
+router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     try {
+      await IdeasWithTags.destroy({
+        where: {
+          ideaId: id
+        }
+      });
+  
       const deletedRows = await Idea.destroy({
         where: {
           id: id
@@ -45,12 +52,14 @@ router.delete('/:id', async (req, res) => {
       if (deletedRows === 0) {
         return res.status(404).json({ message: 'Idea not found' });
       }
+  
       res.status(200).json({ message: 'Idea permanently deleted' });
     } catch (error) {
       console.error('Error in backend deletion:', error);
       res.status(500).json({ error: 'Failed to delete idea' });
     }
-});
+  });
+  
 
 router.put('/restore/:id', async (req, res) => {
     const { id } = req.params;

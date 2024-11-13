@@ -7,6 +7,7 @@ import loginRouter from './routes/Auth.js';
 import commentsRouter from './routes/Comments.js';
 import approvalsRouter from './routes/Approvals.js';
 import binRouter from './routes/BinPage.js';
+import tagsRouter from './routes/TaggingIdeas.js';
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -21,6 +22,7 @@ app.use('/api/auth', loginRouter);
 app.use('/api/comments', commentsRouter);
 app.use('/api/approvals', approvalsRouter);
 app.use('/api/bin', binRouter);
+app.use('/api/tags', tagsRouter);
 
 connectDB(); 
 
