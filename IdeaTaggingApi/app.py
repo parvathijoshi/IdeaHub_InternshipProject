@@ -26,7 +26,7 @@ def classify():
             category = next((cat for cat in categories if cat['name'] == label), None)
             if category:
                 matching_categories.append({
-                    "id": category['id'],  # Use the id from the original input categories
+                    "id": category['id'],
                     "name": label,
                     "score": score
                 })
