@@ -27,7 +27,9 @@ router.get('/', async (req, res) => {
 
 router.put('/approve/:id', async (req, res) => {
   const { id } = req.params;
+
   try {
+    // Update the idea's approval status
     const [updated] = await sequelize.query(
       `UPDATE public."Ideas"
        SET "isApproved" = 1
@@ -48,6 +50,7 @@ router.put('/approve/:id', async (req, res) => {
 
 router.put('/reject/:id', async (req, res) => {
   const { id } = req.params;
+
   try {
     const [updated] = await sequelize.query(
       `UPDATE public."Ideas"
@@ -62,9 +65,10 @@ router.put('/reject/:id', async (req, res) => {
       res.status(404).json({ message: 'Idea not found' });
     }
   } catch (error) {
-    console.error('Error rejecting idea:', error);
+    console.error('Error updating idea rejection status:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 export default router;
