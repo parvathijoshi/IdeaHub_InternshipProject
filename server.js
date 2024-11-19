@@ -9,6 +9,7 @@ import approvalsRouter from './routes/Approvals.js';
 import binRouter from './routes/BinPage.js';
 import tagsRouter from './routes/TaggingIdeas.js';
 import draftsRouter from './routes/SaveDrafts.js';
+import groupsRouter from './routes/Groups.js';
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -25,6 +26,7 @@ app.use('/api/approvals', approvalsRouter);
 app.use('/api/bin', binRouter);
 app.use('/api/tags', tagsRouter);
 app.use('/api/drafts', draftsRouter);
+app.use('/api/groups', groupsRouter);
 
 connectDB(); 
 
