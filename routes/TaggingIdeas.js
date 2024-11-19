@@ -69,39 +69,31 @@ router.get('/updateTags/:ideaId', async (req, res) => {
 });
 
 router.get('/getTags/:id', async (req, res) => {
-    const { id } = req.params;
-  
-    try {
-        const ideaTags = await IdeasWithTags.findAll({
+  const { id } = req.params;
+
+  try {
+      const ideaTags = await IdeasWithTags.findAll({
           where: { ideaId: id },
           attributes: ['categoryId'] 
-        });
-    
-        if (ideaTags.length === 0) {
-          return res.status(404).json({ message: 'No categories found for this idea' });
-        }
-    
-        const categoryIds = ideaTags.map(tag => tag.categoryId);
-        const categories = await Category.findAll({
-          where: {
-            id: categoryIds
-          },
-          attributes: ['id', 'name']  
-        });
-    
-        if (categories.length === 0) {
-          return res.status(404).json({ message: 'No categories found for these categoryIds' });
-        }
+      });
+  
+      const categoryIds = ideaTags.map(tag => tag.categoryId);
+      const categories = categoryIds.length > 0
+          ? await Category.findAll({
+              where: { id: categoryIds },
+              attributes: ['id', 'name']
+            })
+          : [];
 
-        res.status(200).json({
+      res.status(200).json({
           ideaId: id,
           categories: categories
-        });
-        
-      } catch (error) {
-        console.error('Error fetching categories for idea:', error);
-        res.status(500).json({ error: 'Failed to fetch categories for the idea' });
-      }
-  });
+      });
+      
+  } catch (error) {
+      console.error('Error fetching categories for idea:', error);
+      res.status(500).json({ error: 'Failed to fetch categories for the idea' });
+  }
+});
 
 export default router;
