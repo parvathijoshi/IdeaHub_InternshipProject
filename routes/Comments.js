@@ -5,13 +5,14 @@ import { sequelize } from '../config/db.js';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { comment, commentedBy, commentedOn } = req.body;
+    const { comment, commentedBy, commentedOn, isApproverComment } = req.body;
     
     try {
         const newComment = await Comment.create({
             comment,
             commentedBy,
-            commentedOn
+            commentedOn,
+            isApproverComment
         });
         res.status(201).json(newComment);
     } catch (error) {
@@ -25,7 +26,7 @@ router.get('/:ideaId', async (req, res) => {
 
     try {
         const comments = await sequelize.query(
-            `SELECT c.id, c.comment, c."createdAt", c."updatedAt", c."commentedBy", u.username
+            `SELECT c.id, c.comment, c."createdAt", c."updatedAt", c."commentedBy", c."isApproverComment", u.username
             FROM public."Comments" c
             JOIN public."Users" u ON c."commentedBy" = u.id
             WHERE c."commentedOn" = :ideaId`,

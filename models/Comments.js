@@ -19,6 +19,11 @@ const Comment = sequelize.define('Comment', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    isApproverComment: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
 }, { timestamps: true });
 
 export default Comment;
