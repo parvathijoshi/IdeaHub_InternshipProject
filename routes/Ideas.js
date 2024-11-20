@@ -5,7 +5,7 @@ import { sequelize } from '../config/db.js';
 const router = express.Router();
 router.get('/', async (req, res) => {
     try {
-        const { createdBy, is_draft } = req.query; 
+        const { createdBy, is_draft, isApproved } = req.query; 
         let query = `
             SELECT "Ideas".id, "Ideas".title, "Ideas".description, "Ideas"."createdAt", "Ideas".likes, "Ideas"."createdBy", "Users".username, "Ideas"."is_draft", "Ideas"."isApproved"
             FROM public."Ideas"
@@ -19,6 +19,10 @@ router.get('/', async (req, res) => {
         if (is_draft !== undefined) {
             whereConditions.push(`"Ideas"."is_draft" = :is_draft`);
         }
+        if (isApproved !== undefined) {
+            whereConditions.push(`"Ideas"."isApproved" != :isApproved`);
+        }
+
         if (whereConditions.length > 0) {
             query += ` WHERE ${whereConditions.join(' AND ')}`;
         }
@@ -27,7 +31,8 @@ router.get('/', async (req, res) => {
         const ideas = await sequelize.query(query, {
             replacements: {
                 createdBy: createdBy,
-                is_draft: is_draft
+                is_draft: is_draft,
+                isApproved: isApproved
             },  
             type: sequelize.QueryTypes.SELECT
         });
