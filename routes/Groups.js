@@ -48,4 +48,41 @@ router.get('/categories/:categoryID', async (req, res) => {
   }
 });
 
+router.post('/categories', async (req, res) => {
+  const { name } = req.body;
+  const namePattern = /^[A-Za-z\s]+$/;
+  if (!name || !namePattern.test(name.trim())) {
+    return res.status(400).json({ message: 'Category name is invalid. Only letters and spaces are allowed.' });
+  }
+
+  try {
+    const existingCategory = await sequelize.query(
+      'SELECT * FROM public."Categories" WHERE LOWER(name) = LOWER(:name)',
+      {
+        type: sequelize.QueryTypes.SELECT,
+        replacements: { name: name.trim() },
+      }
+    );
+
+    if (existingCategory.length > 0) {
+      return res.status(400).json({ message: 'Category already exists.' });
+    }
+
+    const [newCategory] = await sequelize.query(
+      `INSERT INTO public."Categories" (name)
+      VALUES (:name)
+      RETURNING id, name;`,
+      {
+        type: sequelize.QueryTypes.INSERT,
+        replacements: { name: name.trim() },
+      }
+    );
+
+    res.status(201).json(newCategory);
+  } catch (error) {
+    console.error('Error adding category:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;
