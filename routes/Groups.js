@@ -27,6 +27,7 @@ router.get('/categories/:categoryID', async (req, res) => {
         "Ideas".description, 
         "Ideas"."createdAt", 
         "Ideas".likes, 
+        "Ideas"."isApproved",
         "Users".username
       FROM public."Ideas"
       INNER JOIN public."Users" 
