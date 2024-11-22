@@ -35,6 +35,7 @@ router.get('/categories/:categoryID', async (req, res) => {
       INNER JOIN public."IdeasWithTags" 
         ON "IdeasWithTags"."ideaId" = "Ideas".id
       WHERE "IdeasWithTags"."categoryId" = :categoryID
+      AND "Ideas"."deletedStatus" = 0
       `,
       {
         type: sequelize.QueryTypes.SELECT,
