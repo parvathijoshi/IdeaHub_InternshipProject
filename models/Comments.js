@@ -9,7 +9,7 @@ const Comment = sequelize.define('Comment', {
     },
     comment: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true,
     },
     commentedBy: {
         type: DataTypes.INTEGER,
