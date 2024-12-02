@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { connectDB } from './config/db.js';
+import { connectDB } from './config/db.js'; 
+import { insertDefaultRoles, insertDefaultCategories } from './config/initDefaults.js'; 
 import ideasRouter from './routes/Ideas.js';
 import loginRouter from './routes/Auth.js';
 import commentsRouter from './routes/Comments.js';
@@ -28,8 +29,20 @@ app.use('/api/tags', tagsRouter);
 app.use('/api/drafts', draftsRouter);
 app.use('/api/groups', groupsRouter);
 
-connectDB(); 
+const startServer = async () => {
+  try {
+    await connectDB(); 
+    await insertDefaultRoles(); 
+    await insertDefaultCategories();
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Error starting the server:', error);
+    process.exit(1); 
+  }
+};
+
+startServer();

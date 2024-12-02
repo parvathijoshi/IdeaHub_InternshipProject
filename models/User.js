@@ -21,10 +21,10 @@ const User = sequelize.define('User', {
     },
     roleId: {
         type: DataTypes.INTEGER,
-        references: {
-            model: 'Roles',
-            key: 'id',
-        },
+        // references: {
+        //     model: 'Roles',
+        //     key: 'id',
+        // },
     },
 }, {
     timestamps: false 

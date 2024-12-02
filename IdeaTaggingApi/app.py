@@ -1,9 +1,13 @@
 from flask import Flask, request, jsonify
 from transformers import pipeline
+import time
 
 app = Flask(__name__)
 
+s = time.time()
+print("LOADING BART...")
 classifier = pipeline('zero-shot-classification', model="facebook/bart-large-mnli")
+print(f'LOADING COMPLETED IN {time.time()-s}s')
 
 @app.route('/classify', methods=['POST'])
 def classify():
@@ -37,4 +41,4 @@ def classify():
     })
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)

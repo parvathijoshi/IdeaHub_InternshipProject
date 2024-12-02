@@ -10,18 +10,18 @@ const IdeasWithTags = sequelize.define('IdeasWithTags', {
     ideaId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: 'Ideas',
-            key: 'id'
-        }
+        // references: {
+        //     model: 'Ideas',
+        //     key: 'id'
+        // }
     },
     categoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: 'Categories',
-            key: 'id'
-        }
+        // references: {
+        //     model: 'Categories',
+        //     key: 'id'
+        // }
     }
 }, {
     tableName: 'IdeasWithTags',
