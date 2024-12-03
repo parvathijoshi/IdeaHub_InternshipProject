@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { connectDB } from './config/db.js'; 
-import { insertDefaultRoles, insertDefaultCategories } from './config/initDefaults.js'; 
+import { connectDB } from './config/db.js';
+import { insertDefaultRoles, insertDefaultCategories } from './config/initDefaults.js';
 import ideasRouter from './routes/Ideas.js';
 import loginRouter from './routes/Auth.js';
 import commentsRouter from './routes/Comments.js';
@@ -16,7 +16,12 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 
 // Middleware setup
-app.use(cors());
+app.use(cors({
+  origin: 'http://mind-palace.online', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+  credentials: true 
+}));
 app.use(bodyParser.json());
 
 // Route handling
@@ -33,15 +38,14 @@ const startServer = async () => {
   try {
     await connectDB(); 
     await insertDefaultRoles(); 
-    await insertDefaultCategories();
-
+    await insertDefaultCategories(); 
 
     app.listen(PORT, () => {
-      console.log(`Server running on http://mind-palace.online:${PORT}`);
+      console.log(`Server running at http://mind-palace.online:${PORT}`);
     });
   } catch (error) {
     console.error('Error starting the server:', error);
-    process.exit(1); 
+    process.exit(1);
   }
 };
 
