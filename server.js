@@ -37,7 +37,7 @@ const startServer = async () => {
 
 
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Server running on http://mind-palace.online:${PORT}`);
     });
   } catch (error) {
     console.error('Error starting the server:', error);
