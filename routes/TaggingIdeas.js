@@ -49,7 +49,7 @@ router.get('/updateTags/:ideaId', async (req, res) => {
             }))
         };
 
-        const flaskResponse = await axios.post('http://mind-palace.online:5000/classify', input);
+        const flaskResponse = await axios.post('http://nlp:5000/classify', input);
         const ideaWithTags = flaskResponse.data.categories.map(category => ({
             ideaId: ideaData.id,
             categoryId: category.id
