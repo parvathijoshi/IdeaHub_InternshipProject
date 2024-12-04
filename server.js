@@ -17,10 +17,10 @@ const PORT = process.env.PORT || 5050;
 
 // Middleware setup
 app.use(cors({
-  origin: 'http://mind-palace.online', 
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
-  allowedHeaders: ['Content-Type', 'Authorization'], 
-  credentials: true 
+  origin: ['http://mind-palace.online', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 app.use(bodyParser.json());
 
