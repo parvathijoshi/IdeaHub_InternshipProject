@@ -87,4 +87,31 @@ router.post('/categories', async (req, res) => {
   }
 });
 
+router.delete('/categories/:categoryID', async (req, res) => {
+  const { categoryID } = req.params;
+
+  try {
+    await sequelize.query(
+      'DELETE FROM public."IdeasWithTags" WHERE "categoryId" = :categoryID',
+      {
+        type: sequelize.QueryTypes.DELETE,
+        replacements: { categoryID },
+      }
+    );
+
+    await sequelize.query(
+      'DELETE FROM public."Categories" WHERE id = :categoryID',
+      {
+        type: sequelize.QueryTypes.DELETE,
+        replacements: { categoryID },
+      }
+    );
+
+    res.status(200).json({ message: 'Category deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5050;
 
 // Middleware setup
 app.use(cors({
-  origin: ['http://mind-palace.online', 'http://localhost:3000'],
+  origin: ['http://mind-palace.online', 'http://localhost:3000', 'http://localhost:5173' ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -41,7 +41,7 @@ const startServer = async () => {
     await insertDefaultCategories(); 
 
     app.listen(PORT, () => {
-      console.log(`Server running at http://mind-palace.online:${PORT}`);
+      console.log(`Server running at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error('Error starting the server:', error);
